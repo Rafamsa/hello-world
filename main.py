@@ -30,3 +30,6 @@ class User:  # "receita de objetos"
 
 
 get_connection(**DATABASE)
+
+"""def def():
+    print("abluble sei la")   PYTHON FRESCO NAO ME DEIXA DAR O NOME DA FUNÇÃO DE DEF (palavra reservada)"""
