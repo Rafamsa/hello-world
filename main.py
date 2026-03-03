@@ -1,5 +1,8 @@
-import requests
-import psycopg
+from pathlib import Path  # Path trabalha com manipulação de arquivos
+
+import requests  # faz requisições (pedir algo para a internet) http
+import psycopg  # camada de conexão com o banco de dados (só postgres)
+
 
 DATABASE = {
     "name": "postgres",
@@ -15,6 +18,17 @@ def get_connection(**options):
     return psycopg.connect(conninfo)
 
 
+def get_sql(file):
+    base_dir = (
+        Path.cwd()
+    )  # cwd função que busca a pasta que está usando atualmente | cwd = Current working dir
+    file_path = base_dir / file
+    if not file_path.exists():
+        raise ValueError("Arquivo não encontrado! :(")
+    if not file_path.suffix == ".sql":
+        raise ValueError("Arquivo SQL não encontrado! :(")
+
+
 class User:  # "receita de objetos"
     def list(self):
         response = requests.get(
@@ -25,11 +39,10 @@ class User:  # "receita de objetos"
     def get(self):
         raise NotImplementedError
 
-    def save(self):
-        raise NotImplementedError
+    def save(self): ...  # ... = pass = não fazer nada
 
 
-get_connection(**DATABASE)
+get_sql("eu.sql")
 
-"""def def():
+"""def def()
     print("abluble sei la")   PYTHON FRESCO NAO ME DEIXA DAR O NOME DA FUNÇÃO DE DEF (palavra reservada)"""
