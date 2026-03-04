@@ -22,14 +22,21 @@ def get_sql(file):
     base_dir = (
         Path.cwd()
     )  # cwd função que busca a pasta que está usando atualmente | cwd = Current working dir
-    file_path = base_dir / file
+    file_path = base_dir / "sql" / file
     if not file_path.exists():
         raise ValueError("Arquivo não encontrado! :(")
     if not file_path.suffix == ".sql":
         raise ValueError("Arquivo SQL não encontrado! :(")
+    with open(file_path) as fh:
+        return fh.read()
 
 
 class User:  # "receita de objetos"
+    def __init__(
+        self, connection
+    ):  # __ = Dunder = double under | função com dunder é metodo magico
+        self.connection = connection
+
     def list(self):
         response = requests.get(
             "https://697b4b380e6ff62c3c5b9ac0.mockapi.io/api/v1/users"
@@ -38,11 +45,27 @@ class User:  # "receita de objetos"
 
     def get(self):
         raise NotImplementedError
+        # cursor.fetchone() para pegar informaçao do bd
 
-    def save(self): ...  # ... = pass = não fazer nada
+    def save(self, name, avatar, email):  # ... = pass = não fazer nada
+        sql = get_sql("insert.sql")
+        cursor = self.connection.cursor()
+        cursor.execute(
+            sql,
+            {
+                "name": name,
+                "avatar": avatar,
+                "email": email,
+            },
+        )
+        self.connection.commit()
+        cursor.close()
 
 
-get_sql("eu.sql")
+connection = get_connection(**DATABASE)
+
+user = User(connection)
+user.save("batata", "https.link.com", "arroba@ponto.com")
 
 """def def()
     print("abluble sei la")   PYTHON FRESCO NAO ME DEIXA DAR O NOME DA FUNÇÃO DE DEF (palavra reservada)"""
