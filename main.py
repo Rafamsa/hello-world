@@ -43,8 +43,15 @@ class User:  # "receita de objetos"
         )
         return response.json()
 
-    def get(self):
-        raise NotImplementedError
+    def get(self, id):
+        sql_list = self.list()
+        sql = get_sql("insert.sql")
+        for i in sql_list:
+            if i["id"] == str(id):
+                self.save(i["name"], i["avatar"], i["email"])
+
+            break
+
         # cursor.fetchone() para pegar informaçao do bd
 
     def save(self, name, avatar, email):  # ... = pass = não fazer nada
@@ -65,7 +72,9 @@ class User:  # "receita de objetos"
 connection = get_connection(**DATABASE)
 
 user = User(connection)
-user.save("batata", "https.link.com", "arroba@ponto.com")
+user.get("1")
+
+# user.save("feijao", "https.ceefei.com", "ceefei.jao@gmail.com")
 
 """def def()
     print("abluble sei la")   PYTHON FRESCO NAO ME DEIXA DAR O NOME DA FUNÇÃO DE DEF (palavra reservada)"""
